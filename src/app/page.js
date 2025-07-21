@@ -1,16 +1,20 @@
-import { Button } from '@/components/ui/button'
-import React from 'react'
+"use client";
 
-function page() {
+import { Button } from '../components/ui/button';
+import React from 'react';
+
+function Page() {
+  const handleClick = () => {
+    alert('Button clicked!');
+  };
+
   return (
-    <div className='text-bold'
-    >
-
-      <Button
-      variant
-      >click me</Button>
+    <div>
+      <Button onClick={handleClick} variant="default">
+        Click Me
+      </Button>
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;
