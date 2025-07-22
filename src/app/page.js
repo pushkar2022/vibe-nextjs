@@ -13,7 +13,7 @@ function Page() {
 
     const handleClick = async () => {
     try {
-      const res = await fetch('/api/inngest', {
+      const res = await fetch('/api/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
