@@ -17,4 +17,5 @@ e2b template publish -t e8e7099a-e03a-43f0-af9f-30835a7cde1d
 npm i @e2b/code-interpreter
 
 create a calculator app
+create a ecommerce website
 

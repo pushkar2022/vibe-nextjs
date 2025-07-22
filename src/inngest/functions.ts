@@ -5,7 +5,7 @@ import { inngest } from "./client";
 import { createAgent,  openai } from '@inngest/agent-kit';
 // import { createAgent,  } from 'e2b/agents';
 import { createTool,createNetwork } from '@inngest/agent-kit';
-import { zodToJsonSchema } from "zod-to-json-schema";
+
 // import { z } from '@e2b/sdk';
 import { getSanbox, lastAssistantTextMessagesContent } from './utils';
 
