@@ -1,5 +1,6 @@
 import { z} from 'zod';
 
+
 import { Sandbox } from '@e2b/code-interpreter'
 import { inngest } from "./client";
 import { createAgent,  openai } from '@inngest/agent-kit';
@@ -11,6 +12,9 @@ import { getSanbox, lastAssistantTextMessagesContent } from './utils';
 
 import { handler } from 'next/dist/build/templates/app-page';
 import { PROMPT } from '../prompt';
+import { prisma } from '../lib/prisma';
+// import { PrismaClient } from '../generated/prisma';
+// import { prisma } from '../lib/prisma';
 const commandSchema = z.object({
   command: z.string(),
 });
@@ -18,6 +22,7 @@ export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
   { event: "test/hello.world" },
   async ({ event, step }) => {
+    
     // console.log('event.dataevent.info',event.data.info)
     const sandboxId=await step.run("get-sandbox-id",async()=>{
       // const sandbox = await Sandbox.create("vibe-nextjs-demo-1753197807");
@@ -172,16 +177,54 @@ export const helloWorld = inngest.createFunction(
       }
     })
     const result = await network.run(event.data.info)
+    const isError=!result.state.data.summary||Object.keys(result.state.data.files||{}).length===0;
     const sandboxUrl=await step.run("get-sendbox-url",async()=>{
       const sandbox=await getSanbox(sandboxId)
       const host= sandbox.getHost(3000)
       return `https://${host}`
 
     })
+
+    await step.run("save-result",async()=>{
+      if(isError){
+        return await prisma?.message?.create({
+          data: {
+            content:"Something went Wrong, Please try again.",
+            role:"ASSISTANT",
+            type:"ERROR",
+        
+          
+          }
+        })
+      }
+   
+
+    return await prisma?.message.create({
+      data: {
+        content:result.state.data.summary,
+        role:"ASSISTANT",
+        type:"RESULT",
+     
+        fragment:{
+          create:{
+            sandboxUrl:sandboxUrl,
+            title:"Fragment",
+            files:result.state.data.files
+          }
+        }
+      }
+    })
+  })
     console.log('sandboxUrl',sandboxUrl)
     // console.log('output',output)
 
     //  await step.sleep("wait-a-moment", "10s");
-    return {output ,sandboxUrl };
+    return {
+      
+      sandboxUrl:sandboxUrl,
+      title:"Fragment",
+      files:result.state.data.files,
+      summary: result.state.data.summary
+     };
   },
 );

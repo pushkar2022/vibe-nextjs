@@ -11,12 +11,54 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("NEXT_PUBLIC_FAMILYONE_IMAGE_URL")
 }
 
-model User{
-  id       Int   @id @default(autoincrement())
-  email    String   @unique
-  name     String?
+// model User{
+//   id       Int   @id @default(autoincrement())
+//   email    String   @unique
+//   name     String?
  
+// }
+model Project {
+  id String @id @default(uuid())
+  name String
+   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // messages Message[]
+
+}
+
+enum MessageType{
+  RESULT
+  ERROR
+}
+enum MessageRole{
+  USER
+  ASSISTANT
+}
+
+model Message{
+  id String @id @default(uuid())
+  content String
+  role MessageRole
+  type MessageType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // projectId String
+  // project Project @relation(fields: [projectId], references: [id],onDelete: Cascade)
+  
+  fragment Fragment?
+
+  
+}
+
+model Fragment{
+  id String @id @default(uuid())
+  messageId String @unique
+  message Message @relation(fields: [messageId], references: [id],onDelete: Cascade)
+
+  sandboxUrl String
+  title String
+  files Json
 }

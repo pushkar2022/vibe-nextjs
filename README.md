@@ -16,6 +16,13 @@ e2b template build --name vibe-nextjs-demo-1753197807 --cmd "/compile_page.sh"
 e2b template publish -t e8e7099a-e03a-43f0-af9f-30835a7cde1d
 npm i @e2b/code-interpreter
 
+
+npx prisma migrate reset
+npx prisma migrate dev
+npx prisma migrate deploy
+
+
 create a calculator app
 create a ecommerce website
+
 

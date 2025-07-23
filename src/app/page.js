@@ -22,17 +22,20 @@ function Page() {
       });
 
       const data = await res.json();
-      alert(`Event Triggered! ${JSON.stringify(data)}`);
+      console.log(data)
+      // alert(`Event Triggered! ${JSON.stringify(data)}`);
     } catch (error) {
       console.error('Failed to trigger function', error);
     }
   };
   return (
-    <div className="p-4 max-w-7xl mx-auto">
+    <div className='h-screen w-screen flex items-center justify-center'>
+    <div className=" max-w-7xl mx-auto flex items-center flex-col gap-y-4 justify-center">
       <Input value={inputs} onChange={(e)=>setInputs(e.target.value)}/>
       <Button onClick={handleClick} >
-        Invoke Background 
+        Submit
       </Button>
+    </div>
     </div>
   );
 }
